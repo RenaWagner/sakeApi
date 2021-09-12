@@ -17,7 +17,7 @@ def get_all_products_details_single_page_from_url(url):
     print("fetched product HTML")
     return products_details_single_page
 
-def get_all_products_details_from_all_urls():
+def sake_global_fetch_data():
     all_urls = []
     for i in range(1,8):
         url = "https://sake-global.com/products/page/{}/?lang=en".format(i)
@@ -31,6 +31,3 @@ def get_all_products_details_from_all_urls():
     all_products_info_result = [product for single_page_products in all_products_info for product in single_page_products]
     return all_products_info_result
 
-result = get_all_products_details_from_all_urls()
-for i in range(1,6):
-    print(result[i])
