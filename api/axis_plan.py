@@ -56,7 +56,6 @@ def get_sake_details_from_url(url):
     product_info = get_clean_list_from_url(url)
     if product_info is not None:
         details = get_sake_details(product_info)
-    print("fetched product HTML")
     return details
 
 def get_url(single_box):
@@ -64,6 +63,7 @@ def get_url(single_box):
     return single_url
 
 def axis_plan_fetch_data():
+    print("Axis plan started to fetch")
     global_url = "https://sake.axisplan.com/sake-list/"
     headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
@@ -72,9 +72,13 @@ def axis_plan_fetch_data():
     global_soup = BeautifulSoup(global_req.text, 'html.parser').body
     all_single_boxes = global_soup.find_all("div", {"class": "product-small box"})
     all_urls = [get_url(single_box) for single_box in all_single_boxes]
-    print(all_urls)
-
-    all_products_info = [get_sake_details_from_url(link) for link in all_urls]
+    print("Length of urls is {}.".format(len(all_urls)))
+    all_products_info=[]
+    product_counter = 0
+    for link in all_urls:
+        all_products_info.append(get_sake_details_from_url(link))
+        product_counter += 1
+        percentage =round((product_counter / len(all_urls)) * 100, 1)
+        print('Processed {}% of contents'.format(percentage))
     return all_products_info
-
 

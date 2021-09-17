@@ -54,6 +54,7 @@ def get_sake_details(product_info):
     return sake_details
 
 def sake_mtc_fetch_data():
+    print("Sake MTC started to fetch")
     global_page_url = "https://www.mtcsake.com/sake"
     global_req = requests.get(global_page_url)
     global_soup = BeautifulSoup(global_req.text, 'html.parser').body
@@ -65,13 +66,18 @@ def sake_mtc_fetch_data():
             specific_url=a['href']
             each_url= f'https://www.mtcsake.com{specific_url}'
             all_links.append(each_url)
-    print("print all URLs fetched")
-    all_products_info = [get_sake_product_info_from_url(link) for link in all_links]
-    all_products_details = []
-    for product_info in all_products_info:
+    print("Length of urls is {}.".format(len(all_links)))
+    # all_products_info = [get_sake_product_info_from_url(link) for link in all_links]
+    all_products_info = []
+    product_counter = 0
+    for link in all_links:
+        all_products_info.append(get_sake_product_info_from_url(link))
+        product_counter += 1
+        percentage =round((product_counter / len(all_links)) * 100, 1)
+        print('Processed {}% of contents'.format(percentage))
+    all_products_details = []  
+    for product_info in all_products_info:  
         if product_info is not None:
             sake_detail = get_sake_details(product_info)
             all_products_details.append(sake_detail)
-    print(all_products_details)
     return all_products_details
-

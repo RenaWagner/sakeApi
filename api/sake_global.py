@@ -14,20 +14,21 @@ def get_all_products_details_single_page_from_url(url):
                     "alcohol": all_products_info[i].find(class_="sake-list__meta__alcohol-level").contents[1].contents[0]
                    }
         products_details_single_page.append(sake_details)
-    print("fetched product HTML")
     return products_details_single_page
 
 def sake_global_fetch_data():
+    print("Sake global started to fetch")
     all_urls = []
     for i in range(1,8):
         url = "https://sake-global.com/products/page/{}/?lang=en".format(i)
         all_urls.append(url)
-    print("print all URLs", all_urls)
-    # all_products_info = [get_all_products_details_single_page_from_url(url) for url in all_urls]
+    print("Length of urls is {}.".format(len(all_urls)))
     all_products_info=[]
+    product_counter = 0
     for url in all_urls:
         all_products_info.append(get_all_products_details_single_page_from_url(url))
-        print('Processed {}'.format(url))
+        product_counter += 1
+        percentage =round((product_counter / len(all_urls)) * 100, 1)
+        print('Processed {}% of contents'.format(percentage))
     all_products_info_result = [product for single_page_products in all_products_info for product in single_page_products]
     return all_products_info_result
-
